@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <!-- Título de la página -->
+        <title>Formulario de Inscripción</title>
+    </h:head>
+    <h:body>
+        <p:card>
+            <f:facet name="title">
+                Menu
+            </f:facet>
+            <table>
+        <tr>
+            <td>
+                <a>                    
+                <p:button value="Ir a Alumnos" outcome="index"/>
+            </a>
+            </td>
+            <td>
+                <a>
+                   <p:button value="Ir a Materias" outcome="materias"/>
+                </a>
+            </td>
+            <td>
+                <a>
+                   <p:button value="Ir a Inscripciones" outcome="Vista"/>
+                </a>
+            </td>
+        </tr>
+        </table>
+            
+        </p:card>
+        <p:card style="margin: 5% 5% 5% 5%">
+            <!-- Faceta para el título del card -->
+            <f:facet name="title">
+                Formulario Inscripción
+            </f:facet>            
+            <f:view>
+                <!-- Formulario para la inscripción -->
+                <h:form id="inscripcionForm">
+                    <h:inputHidden id="id" value="#{indexController.inscripcion.id}"/>
+                    <p:panelGrid columns="1">
+                        <p:outputLabel value="Alumno:"/>
+                        <p:selectOneMenu id="id_alumno" value="${indexController.inscripcion.alumno.nombre}"  >                            
+                            <f:selectItem itemLabel="Buscar alumno" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{indexController.alumnosList}" var="alumno" itemValue="#{alumno.nombre}" itemLabel="${alumno.nombre}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Materia:"/>
+                        <p:selectOneMenu id="id_materia" value="#{indexController.inscripcion.materia.nombre}">
+                            <f:selectItem itemLabel="Seleccionar materia" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{indexController.materiasList}" var="materia" itemValue="#{materia.nombre}" itemLabel="${materia.nombre}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Ciclo:"/>
+                        <p:inputText id="ciclo" value="#{indexController.inscripcion.ciclo}"/>
+                        <p:outputLabel value="Año:"/>
+                        <p:inputText id="año" value="#{indexController.inscripcion.año}"/>
+                    </p:panelGrid>
+                    <p:panelGrid columns="4">
+                        <!-- Botón de comando para guardar la inscripción -->
+                        <p:commandButton value="Guardar" 
+                                         action="#{indexController.guardarInscripcion}"
+                                          update="tablaInscripciones inscripcionForm"/>                           
+                    </p:panelGrid>
+                </h:form>
+            </f:view>
+        </p:card>
+        
+        <!-- Segundo card para la lista de inscripciones -->
+        <p:card style="margin: 5% 5% 5% 5%">
+            <!-- Título de la lista de inscripciones -->
+            <h1>Listado de Inscripciones</h1>
+            <!-- Formulario para la tabla de inscripciones -->
+            <h:form id="tablaInscripciones">
+                <!-- DataTable para mostrar la lista de inscripciones -->
+                <p:dataTable rows="5" paginator="true" paginatorPosition="bottom"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                    currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                    rowsPerPageTemplate="5,10,{ShowAll|'All'"
+                    value="#{indexController.inscripcionesList}" var="inscripcion">
+
+                    <!-- Columna para el ID de la inscripción -->
+                    <p:column>
+                        <f:facet name="header">ID</f:facet>
+                        <span>#{inscripcion.id}</span>
+                    </p:column>
+                    <!-- Columna para el nombre del alumno -->
+                    <p:column>
+                        <f:facet name="header">Alumno</f:facet>
+                        <span>#{inscripcion.alumno.nombre}</span>
+                    </p:column>
+                    <!-- Columna para el nombre de la materia -->
+                    <p:column>
+                        <f:facet name="header">Materia</f:facet>
+                        <span>#{inscripcion.materia.nombre}</span>
+                    </p:column>
+                    <!-- Columna para el ciclo -->
+                    <p:column>
+                        <f:facet name="header">Ciclo</f:facet>
+                        <span>#{inscripcion.ciclo}</span>
+                    </p:column>
+                    <!-- Columna para el año -->
+                    <p:column>
+                        <f:facet name="header">Año</f:facet>
+                        <span>#{inscripcion.año}</span>
+                    </p:column>
+                    <!-- Columna para la fecha de inscripción -->
+                    <p:column>
+                        <f:facet name="header">Fecha de Inscripción</f:facet>
+                        <span>#{inscripcion.fechaInscripcion}</span>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:card>
+        
+    </h:body>
+</html>

@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <!-- Título de la página -->
+        <title>Formulario de Materias</title>
+    </h:head>
+    <h:body>
+        <p:card>
+            <f:facet name="title">
+                Menu
+            </f:facet>
+            <table>
+        <tr>
+            <td>
+                <a>                    
+                <p:button value="Ir a Alumnos" outcome="index"/>
+            </a>
+            </td>
+            <td>
+                <a>
+                   <p:button value="Ir a Materias" outcome="materias"/>
+                </a>
+            </td>
+            <td>
+                <a>
+                   <p:button value="Ir a Inscripciones" outcome="Vista"/>
+                </a>
+            </td>
+        </tr>
+        </table>
+            
+        </p:card>
+        <!-- Primer card para el formulario de la materia -->
+        <p:card style="margin: 5% 5% 5% 5%">
+            <!-- Faceta para el título del card -->
+            <f:facet name="title">
+                Formulario Materia
+            </f:facet>
+            
+            <!-- Vista principal de JSF -->
+            <f:view>
+                
+                <!-- Formulario para la materia -->
+                <h:form id="materiaForm">                    
+                    <h:inputHidden id="id" value="#{indexController.materia.id}"/>
+                    <p:panelGrid columns="1" layout="grid">
+                        <p:outputLabel value="Nombre:"/>
+                        <p:inputText id="nombre" value="#{indexController.materia.nombre}"/>                        
+                        <p:outputLabel value="Descripción:"/>
+                        <p:inputTextarea id="descripcion" value="#{indexController.materia.descripcion}"/>  
+                        
+                        <p:outputLabel value="Código:"/>
+                        <p:inputText id="codigo" value="#{indexController.materia.codigo}"/>
+                    </p:panelGrid>
+                    <p:panelGrid columns="4" layout="grid">
+                        <p:commandButton value="Guardar" actionListener="#{indexController.guardarMateria}" update="tablaMaterias materiaForm"/>
+                    </p:panelGrid>
+                </h:form>
+            </f:view>
+        </p:card>
+        
+        <!-- Segundo card para la lista de materias -->
+        <p:card style="margin: 5% 5% 5% 5%">
+            <!-- Título de la lista de materias -->
+            <h1>Listado de Materias</h1>
+            <!-- Formulario para la tabla de materias -->
+            <h:form id="tablaMaterias">
+                <!-- DataTable para mostrar la lista de materias -->
+                <p:dataTable rows="5" paginator="true" paginatorPosition="bottom"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                    currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                    rowsPerPageTemplate="5,10,20"
+                    value="#{indexController.materiasList}" var="materia">
+
+                    <!-- Columna para el ID de la materia -->
+                    <p:column>
+                        <f:facet name="header">ID</f:facet>
+                        <span>#{materia.id}</span>
+                    </p:column>
+                    <!-- Columna para el nombre de la materia -->
+                    <p:column>
+                        <f:facet name="header">Nombre</f:facet>
+                        <span>#{materia.nombre}</span>
+                    </p:column>
+                    <!-- Columna para la descripción de la materia -->
+                    <p:column>
+                        <f:facet name="header">Descripción</f:facet>
+                        <span>#{materia.descripcion}</span>
+                    </p:column>
+                    <!-- Columna para el código de la materia -->
+                    <p:column>
+                        <f:facet name="header">Código</f:facet>
+                        <span>#{materia.codigo}</span>
+                    </p:column>
+                    <!-- Columna para las opciones de edición y eliminación -->
+                    <p:column>
+                        <f:facet name="header">Opciones</f:facet>
+                        <!-- Botón de comando para editar la materia -->
+                        <p:commandButton value="Editar" icon="pi pi-pencil" actionListener="#{indexController.llenarFormeEditarMateria(materia)}" update="materiaForm"/>
+                        <!-- Espaciador entre botones -->
+                        <p:spacer width="10"/>
+                        <!-- Botón de comando para eliminar la materia -->
+                        <p:commandButton value="Eliminar" style="background-color: red" icon="pi pi-trash" 
+                                         action="#{indexController.eliminarMateria(materia)}"
+                                         update="tablaMaterias">
+                            <!-- Confirmación para la eliminación de la materia -->
+                            <p:confirm header="Confirmación" message="¿Deseas eliminar la materia: #{materia.nombre}?" icon="pi pi-info-circle"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <!-- Diálogo de confirmación global -->
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                    <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes"/>
+                </p:confirmDialog>
+            </h:form>
+        </p:card>
+    </h:body>
+</html>
